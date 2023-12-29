@@ -1,0 +1,47 @@
+insert into "Термины_layer".models(name) values
+('a+b'), ('a+d+c'), ('c+e'), ('b+c+a'), ('a')
+on conflict do nothing;
+
+insert into "Термины_layer".elements(name) values
+('a'), ('b'), ('c'), ('d'), ('e')
+on conflict do nothing;
+
+insert into "Термины_layer".units_ru(model_id, text) values
+(1, 'абоба1'), (1, 'абоба2'), (3, 'абоба3'), (3, 'абоба4'), (2, 'абоба5')
+on conflict do nothing;
+
+insert into "Термины_layer".units_en(model_id, text) values
+(1, 'aboba1'), (1, 'aboba2'), (3, 'aboba3'), (3, 'aboba4'), (2, 'aboba5')
+on conflict do nothing;
+
+insert into "Термины_layer".models_and_elems(model_id, elem_id) values
+(1, 1), (1, 2), (3, 2), (3, 1), (4, 3)
+on conflict do nothing;
+
+insert into "Термины_layer".units_ru_and_en(unit_ru_id, unit_en_id) values
+(1, 1), (1, 2), (3, 2), (3, 1), (4, 3)
+on conflict do nothing;
+
+insert into "Термины_layer".properties_and_units_ru(property_id, unit_id) values
+(1, 1), (1, 2), (3, 2), (3, 1), (4, 3)
+on conflict do nothing;
+
+insert into "Термины_layer".properties_and_units_en(property_id, unit_id) values
+(1, 1), (1, 2), (3, 2), (3, 1), (4, 3)
+on conflict do nothing;
+
+insert into "Термины_layer".contexts_and_units_ru(context_id, unit_id) values
+(1, 1), (5, 2), (3, 2), (2, 1), (4, 3)
+on conflict do nothing;
+
+insert into "Термины_layer".contexts_and_units_en(context_id, unit_id) values
+(1, 1), (1, 2), (3, 2), (3, 1), (4, 3)
+on conflict do nothing;
+
+insert into "Термины_layer".users_and_units_ru(user_id, unit_id) values
+(1, 1), (1, 2), (3, 2), (3, 1), (3, 3)
+on conflict do nothing;
+
+insert into "Термины_layer".users_and_units_en(user_id, unit_id) values
+(1, 1), (1, 2), (3, 2), (3, 1), (3, 3)
+on conflict do nothing;

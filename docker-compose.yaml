@@ -1,0 +1,184 @@
+version: '3.8'
+
+services:
+    postgres:
+        container_name: postgres
+        image: postgres:15.4
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_DB: ${POSTGRES_DBNAME}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            PGDATA: /data/postgres
+        restart: always
+        healthcheck:
+            test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+            interval: 5s
+            timeout: 5s
+            retries: 5
+        volumes:
+            - postgres:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+    postgres-mirror:
+        container_name: postgres-mirror
+        image: postgres:15.4
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_DB: ${POSTGRES_DBNAME}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            PGDATA: /data/postgres
+        restart: always
+        healthcheck:
+            test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+            interval: 5s
+            timeout: 5s
+            retries: 5
+        volumes:
+            - postgres-mirror:/var/lib/postgresql/data
+        ports:
+            - "5433:5432"
+    pgadmin:
+        container_name: pgadmin4
+        image: dpage/pgadmin4
+        restart: always
+        environment:
+            PGADMIN_DEFAULT_EMAIL: admin@admin.com
+            PGADMIN_DEFAULT_PASSWORD: root
+        ports:
+            - "5050:80"
+        depends_on:
+            postgres:
+                condition: service_healthy
+    nginx:
+        container_name: nginx
+        build:
+            context: ./
+            dockerfile: nginx.Dockerfile
+        image: termy-nginx
+        restart: always
+        ports:
+            - "4080:80"
+        depends_on:
+            - backend
+            - backend2
+            - backend3
+            - backend-mirror
+    frontend:
+        container_name: frontend
+        build:
+            context: ./
+            dockerfile: frontend.Dockerfile
+        image: termy-frontend
+        restart: always
+        ports:
+            - "3080:3000"
+    backend:
+        container_name: backend
+        build:
+            context: ./
+            dockerfile: api.Dockerfile
+        image: termy-backend
+        env_file:
+            - env/backend.env
+        restart: always
+        ports:
+            - 8080:${BACKEND_PORT}
+        depends_on:
+            postgres:
+                condition: service_healthy
+    backend2:
+        container_name: backend2
+        build:
+            context: ./
+            dockerfile: api.Dockerfile
+        image: termy-backend
+        env_file:
+            - env/backend.env
+        restart: always
+        depends_on:
+            postgres:
+                condition: service_healthy
+            backend:
+                condition: service_started
+    backend3:
+        container_name: backend3
+        build:
+            context: ./
+            dockerfile: api.Dockerfile
+        image: termy-backend
+        env_file:
+            - env/backend.env
+        restart: always
+        depends_on:
+            postgres:
+                condition: service_healthy
+            backend2:
+                condition: service_started
+    jaeger:
+        container_name: jaeger
+        image: jaegertracing/all-in-one
+        restart: always
+        ports:
+            - "16686:16686"
+            - "14268:14268"
+    backend-mirror:
+        container_name: backend-mirror
+        build:
+            context: ./
+            dockerfile: api.Dockerfile
+        env_file:
+            - env/mirror.env
+        restart: always
+        ports:
+            - 8081:${BACKEND_PORT}
+        depends_on:
+            postgres-mirror:
+                condition: service_healthy
+            jaeger:
+                condition: service_started
+    tracer:
+        container_name: tracer
+        build:
+            context: ./
+            dockerfile: trace.Dockerfile
+        image: termy-tracer
+        volumes:
+            - ./traces:/app/traces
+        env_file:
+            - env/backend.env
+        restart: always
+        depends_on:
+            backend-mirror:
+                condition: service_started
+    benchmark:
+        container_name: benchmark
+        build:
+            context: ./
+            dockerfile: benchmark.Dockerfile
+        environment:
+            TC_HOST: "host.docker.internal"
+        privileged: true
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        restart: always
+        ports:
+            - "2112:2112"
+    prometheus:
+        container_name: prometheus
+        image: prom/prometheus:v2.47.2
+        volumes:
+            - ./env/prometheus.yaml:/etc/prometheus/prometheus.yaml
+        command:
+            - '--config.file=/etc/prometheus/prometheus.yaml'
+            - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+            - '--web.console.templates=/usr/share/prometheus/consoles'
+        ports:
+            - "9090:9090"
+        depends_on:
+            benchmark:
+                condition: service_started
+volumes:
+    postgres:
+        driver: local
+    postgres-mirror:
+        driver: local
