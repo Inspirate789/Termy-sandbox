@@ -1,103 +1,14 @@
-image: inspirate789/dind-golang:1.21
-
-variables:
-  DOCKER_DRIVER: overlay2
-  DOCKER_HOST: tcp://docker:2375
-  DOCKER_TLS_CERTDIR: ""
-
-services:
-  - name: docker:dind
-    command: ["--tls=false"]
-
-before_script:
-  - docker info
-
 stages:
-  - build
   - test
 
-backend-build-job:
-  stage: build
-  when: always
-  script:
-    - go mod tidy
-    - go build cmd/backend/main.go
-  artifacts:
-    paths:
-      - main
-    expire_in: 1 hour
-
-.setup_test_env:
-  before_script:
-    - rm -rf $(pwd)/test-reports/*
-    - mkdir -p $(pwd)/test-reports
-    - export ALLURE_OUTPUT_PATH=$(pwd)/test-reports
-    - go mod tidy
-
-backend-use-case-test-job:
-  stage: test
-  when: always
-  extends: .setup_test_env
-  script:
-    - go test -v -short ./internal/domain/services/storage
-  artifacts:
-    paths:
-      - test-reports
-    expire_in: 1 hour
-  needs:
-    - backend-build-job
-
-backend-postgres-test-job:
-  stage: test
-  when: always
-  extends: .setup_test_env
-  script:
-    - go test -v -short ./internal/adapters/storage/postgres_storage
-  artifacts:
-    paths:
-      - test-reports
-    expire_in: 1 hour
-  needs:
-    - backend-build-job
-
-backend-postgres-integration-test-job:
-  stage: test
-  when: always
-  extends: .setup_test_env
-  script:
-    - go test -v ./internal/adapters/storage/postgres_storage/integration
-  artifacts:
-    paths:
-      - test-reports
-    expire_in: 1 hour
-  needs:
-    - backend-use-case-test-job
-    - backend-postgres-test-job
-
-backend-e2e-test-job:
-  stage: test
-  when: always
-  extends: .setup_test_env
-  script:
-    - go test -v ./internal/adapters/server
-  artifacts:
-    paths:
-      - test-reports
-    expire_in: 1 hour
-  needs:
-    - backend-postgres-integration-test-job
-
-backend-e2e-trace-job:
+2fa-test-job:
   stage: test
   when: always
   script:
-    - docker compose --env-file env/deploy.env up postgres-mirror backend-mirror jaeger tracer -d
-    - docker ps
-    - while ! [ -f "traces/trace.json" ]; do sleep 3; done # wait for tracer
-    - sleep 10
-  artifacts:
-    paths:
-      - traces/trace.json
-    expire_in: 24 hours
-  needs:
-    - backend-e2e-test-job
+    - export VAULT_ADDR="http://127.0.0.1:8200"
+    - export VAULT_TOKEN="$(vault write -field=token auth/jwt/login role=testapp jwt=$CI_JOB_JWT)"
+    - TELEGRAM_API_TOKEN=$(vault kv get -field=telegram_api_token secret/test/telegram_api_token)
+      TEST_USER_ID=$(vault kv get -field=user_id secret/test/user_id)
+      TEST_USER_NAME=$(vault kv get -field=user_name secret/test/user_name)
+      TEST_USER_PASSWORD=$(vault kv get -field=user_password secret/test/user_password)
+      go test -v ./internal/adapters/server/middleware

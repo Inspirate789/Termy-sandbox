@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="db9f9e5f-1170-4121-ae39-94854a22084c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../internal/adapters/server/middleware/2fa_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../internal/adapters/server/middleware/jwt.go" beforeDir="false" afterPath="$PROJECT_DIR$/../internal/adapters/server/middleware/jwt.go" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="tsconfig.json" />
+        <option value="JavaScript File" />
+        <option value="TypeScript File" />
+        <option value="TypeScript JSX File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2XtnZDUjesP9E6a0oqf7tTY2cWX" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "lab__04",
+    "last_opened_file_path": "/home/inspirate789/Документы/7_sem/Software_testing_and_debugging/testing-web-2023-labs/frontend/test",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs.jest.jest_package": "/home/inspirate789/Документы/7_sem/Software_testing_and_debugging/testing-web-2023-labs/frontend/node_modules/react-scripts",
+    "nodejs.mocha.mocha_node_package_dir": "/home/inspirate789/Документы/7_sem/Software_testing_and_debugging/testing-web-2023-labs/frontend/node_modules/mocha",
+    "nodejs_interpreter_path": "node",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "settings.javascript.linters.eslint",
+    "ts.external.directory.path": "/home/inspirate789/Документы/7_sem/Software_testing_and_debugging/testing-web-2023-labs/frontend/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/test" />
+      <recent name="$PROJECT_DIR$/src/test" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public" />
+      <recent name="$PROJECT_DIR$/src/pages" />
+      <recent name="$PROJECT_DIR$/tests" />
+      <recent name="$PROJECT_DIR$/src/services" />
+      <recent name="$PROJECT_DIR$/src" />
+    </key>
+  </component>
+  <component name="RunManager" selected="npm.npm start">
+    <configuration name="login" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <jest-package value="$PROJECT_DIR$/node_modules/react-scripts" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/test/AuthService.test.ts" />
+      <test-names>
+        <test-name value="login" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="Debug Application" type="JavascriptDebugType" uri="http://localhost:3000">
+      <method v="2" />
+    </configuration>
+    <configuration name="npm start" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="test" type="js.build_tools.npm" temporary="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="test" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="renders learn react link" type="mocha-javascript-test-runner" temporary="true" nameIsGenerated="true">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <mocha-package>$PROJECT_DIR$/node_modules/mocha</mocha-package>
+      <working-directory>$PROJECT_DIR$</working-directory>
+      <pass-parent-env>true</pass-parent-env>
+      <ui>bdd</ui>
+      <extra-mocha-options />
+      <test-kind>TEST</test-kind>
+      <test-file>$PROJECT_DIR$/src/App.test.tsx</test-file>
+      <test-names>
+        <name value="renders learn react link" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="JavaScript Debug.Debug Application" />
+      <item itemvalue="Jest.login" />
+      <item itemvalue="Mocha.renders learn react link" />
+      <item itemvalue="npm.npm start" />
+      <item itemvalue="npm.test" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.test" />
+        <item itemvalue="Jest.login" />
+        <item itemvalue="Mocha.renders learn react link" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="db9f9e5f-1170-4121-ae39-94854a22084c" name="Changes" comment="" />
+      <created>1699457297536</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1699457297536</updated>
+      <workItem from="1699457298571" duration="430000" />
+      <workItem from="1699466169095" duration="219000" />
+      <workItem from="1699600195701" duration="4566000" />
+      <workItem from="1699622836926" duration="339000" />
+      <workItem from="1699623623261" duration="10728000" />
+      <workItem from="1699779456358" duration="2750000" />
+      <workItem from="1699814495413" duration="1288000" />
+      <workItem from="1699815886999" duration="511000" />
+      <workItem from="1699887161896" duration="1312000" />
+      <workItem from="1699895501168" duration="12798000" />
+      <workItem from="1699940929071" duration="20853000" />
+      <workItem from="1700002761483" duration="184000" />
+      <workItem from="1700026353353" duration="13533000" />
+      <workItem from="1700378719946" duration="13890000" />
+      <workItem from="1700592910485" duration="10436000" />
+      <workItem from="1700642283152" duration="1394000" />
+      <workItem from="1700827239701" duration="2454000" />
+      <workItem from="1701006721295" duration="2301000" />
+      <workItem from="1701012255101" duration="661000" />
+      <workItem from="1701807147923" duration="1956000" />
+      <workItem from="1701851213736" duration="599000" />
+      <workItem from="1701962181108" duration="1712000" />
+      <workItem from="1702058920879" duration="1267000" />
+      <workItem from="1702198185040" duration="1919000" />
+      <workItem from="1702203187683" duration="17481000" />
+      <workItem from="1702296943023" duration="11124000" />
+      <workItem from="1702319360222" duration="6447000" />
+      <workItem from="1702404169776" duration="17463000" />
+      <workItem from="1703842818288" duration="1000" />
+      <workItem from="1704530299547" duration="46000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

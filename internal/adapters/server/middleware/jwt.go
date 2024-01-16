@@ -2,13 +2,18 @@ package middleware
 
 import (
 	"context"
+	"crypto/md5"
+	"crypto/sha1"
+	"encoding/base64"
 	"git.iu7.bmstu.ru/sam20u745/testing-web-2023-labs/internal/domain/entities"
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	tracesdk "go.opentelemetry.io/otel/sdk/trace"
 	"net/http"
 	"os"
 	"slices"
+	"strconv"
 	"time"
 )
 
@@ -20,8 +25,9 @@ type LoginResponse struct {
 type UserCheckFunc func(entities.AuthRequest) (*entities.User, error)
 
 const (
-	identityKey = "id"
-	roleKey     = "role"
+	identityKey   = "id"
+	roleKey       = "role"
+	factorAuthKey = "AUTH_CODE"
 )
 
 func MakeGinJWTMiddleware(requiredRoles []string, getUser UserCheckFunc) (*jwt.GinJWTMiddleware, error) {
@@ -167,4 +173,59 @@ func MakeGinJWTMiddlewareWithTracing(requiredRoles []string, getUser UserCheckFu
 		TokenHeadName: "Bearer",
 		TimeFunc:      time.Now,
 	})
+}
+
+func MakeGinJWTMiddlewareWith2FA(requiredRoles []string, getUser UserCheckFunc, tgApiToken string) (*jwt.GinJWTMiddleware, error) {
+	mw, err := MakeGinJWTMiddleware(requiredRoles, getUser)
+	if err != nil {
+		return nil, err
+	}
+
+	tgApi, err := tgbotapi.NewBotAPI(tgApiToken)
+	if err != nil {
+		return nil, err
+	}
+
+	mw.PayloadFunc = func(data interface{}) jwt.MapClaims { // for login (step 2 of 2)
+		if v, ok := data.(*entities.User); ok {
+			hasher := sha1.New()
+			hasher.Write([]byte(strconv.Itoa(v.ID)))
+			authCode := base64.StdEncoding.EncodeToString(hasher.Sum(nil))
+
+			msg := tgbotapi.NewMessageToChannel(strconv.Itoa(v.ID), authCode)
+			_, err := tgApi.Send(msg)
+			if err != nil {
+				return nil
+			}
+
+			return jwt.MapClaims{
+				identityKey: v.ID,
+				roleKey:     v.Role,
+			}
+		}
+		return nil
+	}
+
+	mw.IdentityHandler = func(c *gin.Context) interface{} { // for auth (step 1 of 2)
+		claims := jwt.ExtractClaims(c)
+
+		id, idExist := claims[identityKey].(int)
+		authCode := c.GetString(factorAuthKey)
+		if !idExist || authCode == "" {
+			return nil
+		}
+
+		hasher := md5.New()
+		hasher.Write([]byte(strconv.Itoa(id)))
+		if authCode != base64.StdEncoding.EncodeToString(hasher.Sum(nil)) {
+			return nil
+		}
+
+		return &entities.User{
+			ID:   claims[identityKey].(int),
+			Role: claims[roleKey].(string),
+		}
+	}
+
+	return mw, nil
 }
